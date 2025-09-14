@@ -1,0 +1,97 @@
+.sequence-selector {
+  margin-bottom: 8px;
+}
+
+.sequence-selector label {
+  display: block;
+  font-weight: 500;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.dropdown-container { position: relative; }
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #2a2a2a;
+  border-radius: 8px;
+  background: #0b0b0b;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.2s ease;
+}
+
+.dropdown-trigger:hover { border-color: #E8AE43; }
+
+.dropdown-trigger:focus,
+.dropdown-trigger:focus-visible {
+  outline: none;
+  border-color: #E8AE43;
+  box-shadow: 0 0 0 3px rgba(232, 174, 67, 0.15);
+}
+
+.dropdown-trigger.open {
+  border-color: #E8AE43;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.arrow { transition: transform 0.2s ease; color: #bbb; }
+.arrow.up { transform: rotate(180deg); }
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #111;
+  border: 2px solid #E8AE43;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.no-items {
+  padding: 16px;
+  text-align: center;
+  color: #ddd;
+  font-style: italic;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e1e1e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-item:hover { background-color: #161616; }
+
+.dropdown-item.selected { background-color: #181204; }
+
+.dropdown-item.clear { color: #E8AE43; justify-content: center; border-bottom: none; }
+
+.item-name { color: #eee; font-weight: 500; }
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #141414;
+  color: #ddd;
+  cursor: pointer;
+}
+.icon-btn:hover { background: #1a1a1a; color: #fff; }

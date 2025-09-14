@@ -1,0 +1,403 @@
+.offline-status {
+  background: #000000;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #000;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+.connectivity-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.connectivity-icon {
+  font-size: 18px;
+}
+
+.connectivity-text {
+  color: #e9ecef;
+}
+
+/* Texto Online/Offline em branco para fundo escuro */
+.status-info {
+  color: #ffffff;
+}
+
+.status-indicator {
+  color: #ffffff;
+}
+
+.details-toggle {
+  background: none;
+  border: none;
+  color: #E8AE43;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.details-toggle:hover {
+  background-color: #111;
+}
+
+.status-details {
+  padding: 16px;
+  background: #000;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.stat-item.pending {
+  background-color: #fff3cd;
+  border-color: #ffeaa7;
+}
+
+.stat-item.sent {
+  background-color: #d1edff;
+  border-color: #74b9ff;
+}
+
+.stat-item.failed {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.stat-item.total {
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+}
+
+.stat-icon {
+  font-size: 20px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6c757d;
+  line-height: 1;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sync-btn, .clear-btn, .export-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sync-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.sync-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.sync-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.clear-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.export-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.export-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.export-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.status-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.status-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Lista de leads do banco local */
+.leads-list-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #333;
+}
+
+.leads-list-section h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.leads-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.lead-item-offline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.lead-info {
+  flex: 1;
+}
+
+.lead-info .lead-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.lead-info .lead-company {
+  color: #ccc;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.lead-info .lead-phone {
+  color: #E8AE43;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.lead-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lead-status.pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+.lead-status.sent {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+  border: 1px solid #28a745;
+}
+
+.lead-status.failed {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.no-leads {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+}
+
+.status-message.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.leads-list {
+  border-top: 1px solid #333;
+  padding-top: 16px;
+}
+
+.leads-list h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #495057;
+}
+
+.leads-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lead-row {
+  display: grid;
+  grid-template-columns: 30px 1fr 1fr 120px 30px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: 1px solid #e9ecef;
+}
+
+.lead-row.pending {
+  background-color: #fff9e6;
+}
+
+.lead-row.sent {
+  background-color: #e8f4fd;
+}
+
+.lead-row.failed {
+  background-color: #fdf2f2;
+}
+
+.lead-status {
+  text-align: center;
+}
+
+.lead-name {
+  font-weight: 500;
+  color: #495057;
+}
+
+.lead-company {
+  color: #6c757d;
+}
+
+.lead-date {
+  font-size: 11px;
+  color: #6c757d;
+  text-align: right;
+}
+
+.lead-error {
+  text-align: center;
+  cursor: help;
+}
+
+.more-leads {
+  margin: 12px 0 0 0;
+  font-size: 12px;
+  color: #6c757d;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Mobile responsivo */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .export-buttons {
+    flex-direction: column;
+  }
+  
+  .lead-row {
+    grid-template-columns: 25px 1fr 80px 25px;
+    font-size: 12px;
+  }
+  
+  .lead-company {
+    display: none;
+  }
+  
+  .status-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}

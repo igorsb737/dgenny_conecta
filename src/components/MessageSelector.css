@@ -1,0 +1,256 @@
+.message-selector {
+  margin-bottom: 24px;
+}
+
+.message-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.message-selector label {
+  display: block;
+  font-weight: 500;
+  color: #fff; /* texto branco */
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.add-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: #E8AE43;
+  color: #000;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, filter 0.2s ease;
+}
+
+.add-icon-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #2a2a2a; /* igual input */
+  border-radius: 8px;
+  background: #0b0b0b; /* caixa preta */
+  color: #fff; /* texto claro */
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.2s ease;
+}
+
+.dropdown-trigger:hover {
+  border-color: #E8AE43;
+}
+
+.dropdown-trigger:focus,
+.dropdown-trigger:focus-visible {
+  outline: none;
+  border-color: #E8AE43;
+  box-shadow: 0 0 0 3px rgba(232, 174, 67, 0.15);
+}
+
+.dropdown-trigger.open {
+  border-color: #E8AE43;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+  color: #bbb;
+}
+
+.arrow.up {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #111; /* menu escuro */
+  border: 2px solid #E8AE43;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.no-messages {
+  padding: 16px;
+  text-align: center;
+  color: #ddd;
+  font-style: italic;
+}
+
+.message-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e1e1e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.message-item:hover {
+  background-color: #161616;
+}
+
+.message-item.selected { background-color: #181204; }
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+.message-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.message-icon {
+  font-size: 18px;
+}
+
+.message-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.message-name {
+  font-weight: 500;
+  color: #eee;
+}
+
+.message-type {
+  font-size: 12px;
+  color: #bbb;
+  text-transform: capitalize;
+}
+
+.message-order {
+  font-size: 12px;
+  color: #bbb;
+  background: #1f1f1f;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #007bff;
+}
+
+.message-item.selected .checkbox {
+  background-color: #E8AE43;
+  border-color: #E8AE43;
+  color: #000;
+}
+
+.selected-summary {
+  margin-top: 16px;
+  padding: 16px;
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+
+.selected-summary h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 14px;
+}
+
+.selected-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selected-message-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #0b0b0b;
+  border-radius: 6px;
+  border: 1px solid #222;
+}
+
+.sequence-number {
+  font-weight: 600;
+  color: #E8AE43;
+  min-width: 20px;
+}
+
+.selected-message-item .message-icon {
+  font-size: 16px;
+}
+
+.selected-message-item .message-name {
+  font-size: 14px;
+  color: #eee;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .dropdown-trigger {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .message-item {
+    padding: 14px 16px;
+  }
+
+  .message-details {
+    gap: 4px;
+  }
+
+  .selected-summary {
+    padding: 12px;
+  }
+
+  .selected-message-item {
+    padding: 10px;
+  }
+}
+
+/* Prevent body scroll when dropdown is open */
+.dropdown-menu {
+  overscroll-behavior: contain;
+}
