@@ -256,36 +256,55 @@ const MessageCreator: React.FC<MessageCreatorProps> = ({ onAddCampaign, onUpdate
   const handleSaveSequence = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateToSaveSequence()) return;
+    
     const data: Omit<Campaign, 'id'> = {
       nome: sequenceName.trim(),
       mensagens: parts.map((p, i) => ({ ...p, ordem: i + 1 })),
       crmProvider: selectedCrmProvider || undefined,
       crmStage: selectedCrmStage || undefined
     };
+    
     const auth = getAuth();
     const uid = auth.currentUser?.uid;
 
+    console.log('🔄 Iniciando salvamento da sequência:', {
+      nome: data.nome,
+      uid: uid ? 'presente' : 'ausente',
+      isEdit: !!campaignToEdit,
+      mensagensCount: data.mensagens.length
+    });
 
     if (campaignToEdit && onUpdateCampaign) {
       // Atualização
       const updated: Campaign = { id: campaignToEdit.id, ...data } as Campaign;
-      try {
-        if (uid) {
+      
+      // Atualizar localmente primeiro
+      onUpdateCampaign(updated);
+      
+      // Tentar salvar no Firebase
+      if (uid) {
+        try {
           const { collection, query, where, getDocs, updateDoc, doc, getDoc } = await import('firebase/firestore');
           const ref = collection(db, 'users', uid, 'campaigns');
           const q = query(ref, where('localId', '==', campaignToEdit.id));
           const snap = await getDocs(q);
+          
           // Preparar dados para Firebase (remover undefined)
           const updateData: any = {
             nome: updated.nome,
-            mensagens: updated.mensagens
+            mensagens: updated.mensagens,
+            updatedAt: serverTimestamp()
           };
           if (updated.crmProvider) updateData.crmProvider = updated.crmProvider;
           if (updated.crmStage) updateData.crmStage = updated.crmStage;
 
+          let firebaseUpdated = false;
+          
           if (snap.size > 0) {
             for (const d of snap.docs) {
               await updateDoc(doc(db, 'users', uid, 'campaigns', d.id), updateData);
+              firebaseUpdated = true;
+              console.log('✅ Sequência atualizada no Firebase via localId:', d.id);
             }
           } else {
             // Fallback: documento pode não ter localId (criado antes). Tenta atualizar pelo docId diretamente
@@ -293,35 +312,66 @@ const MessageCreator: React.FC<MessageCreatorProps> = ({ onAddCampaign, onUpdate
             const exists = await getDoc(directRef);
             if (exists.exists()) {
               await updateDoc(directRef, updateData);
+              firebaseUpdated = true;
+              console.log('✅ Sequência atualizada no Firebase via docId direto:', campaignToEdit.id);
             }
           }
+          
+          if (!firebaseUpdated) {
+            console.warn('⚠️ Documento não encontrado no Firebase para atualização. Criando novo documento...');
+            // Se não encontrou, criar novo documento
+            await addDoc(ref, {
+              ...updateData,
+              userId: uid,
+              localId: campaignToEdit.id,
+              createdAt: serverTimestamp()
+            });
+            console.log('✅ Nova sequência criada no Firebase');
+          }
+          
+        } catch (err) {
+          console.error('❌ Falha ao atualizar sequência no Firebase:', err);
+          alert('Sequência salva localmente, mas houve erro ao sincronizar com o servidor. Verifique sua conexão.');
         }
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Falha ao atualizar sequência no Firestore', err);
+      } else {
+        console.warn('⚠️ Usuário não autenticado - sequência salva apenas localmente');
+        alert('Sequência salva localmente. Faça login para sincronizar com o servidor.');
       }
-      onUpdateCampaign(updated);
     } else {
       // Criação
       const localId = onAddCampaign(data);
-      try {
-        if (uid) {
+      console.log('📝 Sequência adicionada localmente com ID:', localId);
+      
+      // Tentar salvar no Firebase
+      if (uid) {
+        try {
           const ref = collection(db, 'users', uid, 'campaigns');
-          await addDoc(ref, {
+          const firebaseData: any = {
             nome: data.nome,
             mensagens: data.mensagens,
-            crmProvider: data.crmProvider,
-            crmStage: data.crmStage,
             userId: uid,
             localId,
             createdAt: serverTimestamp()
-          });
+          };
+          
+          // Adicionar campos CRM apenas se definidos
+          if (data.crmProvider) firebaseData.crmProvider = data.crmProvider;
+          if (data.crmStage) firebaseData.crmStage = data.crmStage;
+          
+          const docRef = await addDoc(ref, firebaseData);
+          console.log('✅ Sequência salva no Firebase com ID:', docRef.id);
+          
+        } catch (err) {
+          console.error('❌ Falha ao salvar sequência no Firebase:', err);
+          alert('Sequência salva localmente, mas houve erro ao sincronizar com o servidor. Verifique sua conexão.');
         }
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Falha ao salvar sequência no Firestore', err);
+      } else {
+        console.warn('⚠️ Usuário não autenticado - sequência salva apenas localmente');
+        alert('Sequência salva localmente. Faça login para sincronizar com o servidor.');
       }
     }
+    
+    // Limpar formulário
     setSequenceName('');
     setCurrentType('texto');
     setCurrentContent('');
