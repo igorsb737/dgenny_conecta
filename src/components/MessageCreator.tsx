@@ -275,26 +275,24 @@ const MessageCreator: React.FC<MessageCreatorProps> = ({ onAddCampaign, onUpdate
           const ref = collection(db, 'users', uid, 'campaigns');
           const q = query(ref, where('localId', '==', campaignToEdit.id));
           const snap = await getDocs(q);
+          // Preparar dados para Firebase (remover undefined)
+          const updateData: any = {
+            nome: updated.nome,
+            mensagens: updated.mensagens
+          };
+          if (updated.crmProvider) updateData.crmProvider = updated.crmProvider;
+          if (updated.crmStage) updateData.crmStage = updated.crmStage;
+
           if (snap.size > 0) {
             for (const d of snap.docs) {
-              await updateDoc(doc(db, 'users', uid, 'campaigns', d.id), {
-                nome: updated.nome,
-                mensagens: updated.mensagens,
-                crmProvider: updated.crmProvider,
-                crmStage: updated.crmStage
-              });
+              await updateDoc(doc(db, 'users', uid, 'campaigns', d.id), updateData);
             }
           } else {
             // Fallback: documento pode não ter localId (criado antes). Tenta atualizar pelo docId diretamente
             const directRef = doc(db, 'users', uid, 'campaigns', campaignToEdit.id);
             const exists = await getDoc(directRef);
             if (exists.exists()) {
-              await updateDoc(directRef, { 
-                nome: updated.nome, 
-                mensagens: updated.mensagens,
-                crmProvider: updated.crmProvider,
-                crmStage: updated.crmStage 
-              });
+              await updateDoc(directRef, updateData);
             }
           }
         }

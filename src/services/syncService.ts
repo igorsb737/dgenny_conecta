@@ -338,14 +338,45 @@ class SyncService {
     const sendAudio = async (base64: string) => {
       const endpoint = buildEndpoint('sendWhatsAppAudio');
       try {
+        // Garantir que seja base64 puro (remover data URL prefix se existir)
+        const pureBase64 = base64.includes(',') ? base64.split(',')[1] : base64;
+        
+        // Montar payload real (estrutura correta da Evolution API)
+        const payload = {
+          number: leadPhone,
+          audio: pureBase64,
+          delay: 1200
+        };
+
+        // Log do início do base64 para debug
+        const base64Preview = base64 ? base64.substring(0, 50) + '...' : 'VAZIO';
+        const pureBase64Preview = pureBase64 ? pureBase64.substring(0, 50) + '...' : 'VAZIO';
+        console.log('🔍 Base64 original preview:', base64Preview);
+        console.log('🔍 Base64 puro preview:', pureBase64Preview);
+        console.log('📏 Base64 original length:', base64?.length ?? 0);
+        console.log('📏 Base64 puro length:', pureBase64?.length ?? 0);
+
+        // Montar log de cURL seguro (mascara apikey e evita logar o base64 completo)
+        const maskedKey = apiKey ? `${'*'.repeat(Math.max(apiKey.length - 4, 0))}${apiKey.slice(-4)}` : '';
+        const payloadForLog = {
+          ...payload,
+          audio: `[base64:${pureBase64?.length ?? 0} chars]`
+        };
+        const jsonBodyForCurl = JSON.stringify(payloadForLog).replace(/'/g, "'\\''");
+        const curlLog = `curl -X POST '${endpoint}' -H 'Content-Type: application/json' -H 'apikey: ${maskedKey}' -d '${jsonBodyForCurl}'`;
+        console.log('➡️ EVO audio cURL:', curlLog);
+
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'apikey': apiKey },
-          body: JSON.stringify({ number: leadPhone, options: { presence: 'recording', encoding: true }, audioMessage: { audio: base64 } }),
+          body: JSON.stringify(payload),
         });
         if (!res.ok) {
           const body = await res.text().catch(() => '');
           console.error('EVO audio error', res.status, body);
+          console.error('❌ Payload enviado:', JSON.stringify(payload, null, 2));
+        } else {
+          console.log('✅ Áudio enviado com sucesso');
         }
       } catch (e) { console.error('Falha ao enviar áudio', e); }
     };
@@ -353,14 +384,27 @@ class SyncService {
     const sendMedia = async (mediaType: 'image' | 'video' | 'document', base64: string, fileName?: string, caption?: string) => {
       const endpoint = buildEndpoint('sendMedia');
       try {
+        // Montar payload real (corrigindo mediaType -> mediatype)
+        const payload = {
+          number: leadPhone,
+          options: { presence: 'composing' },
+          mediaMessage: { mediatype: mediaType, fileName: fileName || `${mediaType}.bin`, caption: caption || '', media: base64 },
+        };
+
+        // Montar log de cURL seguro (mascara apikey e evita logar o base64 completo)
+        const maskedKey = apiKey ? `${'*'.repeat(Math.max(apiKey.length - 4, 0))}${apiKey.slice(-4)}` : '';
+        const payloadForLog = {
+          ...payload,
+          mediaMessage: { ...payload.mediaMessage, media: `[base64:${base64?.length ?? 0} chars]` }
+        };
+        const jsonBodyForCurl = JSON.stringify(payloadForLog).replace(/'/g, "'\\''");
+        const curlLog = `curl -X POST '${endpoint}' -H 'Content-Type: application/json' -H 'apikey: ${maskedKey}' -d '${jsonBodyForCurl}'`;
+        console.log(`➡️ EVO ${mediaType} cURL:`, curlLog);
+
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'apikey': apiKey },
-          body: JSON.stringify({
-            number: leadPhone,
-            options: { presence: 'composing' },
-            mediaMessage: { mediaType: mediaType, fileName: fileName || `${mediaType}.bin`, caption: caption || '', media: base64 },
-          }),
+          body: JSON.stringify(payload),
         });
         if (!res.ok) {
           const body = await res.text().catch(() => '');
@@ -376,13 +420,8 @@ class SyncService {
         const msg = applyTemplate(st?.conteudo || '');
         if (msg) await sendText(msg);
       } else if (st?.tipo === 'audio' && st?.base64) {
-        const mt = (st?.mimeType || '').toLowerCase();
-        const supportedForAudio = /(audio\/(mp3|mpeg|mp4|aac|ogg|opus|wav))/.test(mt);
-        if (supportedForAudio) {
-          await sendAudio(st.base64);
-        } else {
-          await sendMedia('document', st.base64, st?.fileName || 'audio.webm');
-        }
+        // Áudio sempre usa sendWhatsAppAudio, independente do formato
+        await sendAudio(st.base64);
       } else if ((st?.tipo === 'imagem' || st?.tipo === 'video' || st?.tipo === 'documento') && st?.base64) {
         const mt = st.tipo === 'imagem' ? 'image' : st.tipo === 'video' ? 'video' : 'document';
         const caption = st?.conteudo ? applyTemplate(st.conteudo) : '';

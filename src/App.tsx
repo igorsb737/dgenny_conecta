@@ -190,12 +190,17 @@ const App: React.FC = () => {
         const campaigns = updatedCampaigns.map((c: any) => ({
           id: c.id,
           nome: c.nome,
-          mensagens: c.mensagens,
+          mensagens: c.mensagens || [],
           crmProvider: c.crmProvider,
-          crmStage: c.crmStage
+          crmStage: c.crmStage,
+          createdAt: c.createdAt || new Date(),
+          syncedAt: c.syncedAt || new Date()
         }));
-        setCampaigns(campaigns);
-        console.log('🔄 Campanhas atualizadas via syncService:', campaigns.length);
+        
+        // Não sobrescrever campanhas se o modal de edição estiver aberto
+        if (!isMessageModalOpen) {
+          setCampaigns(campaigns);
+        }
       }
     };
 
@@ -204,7 +209,7 @@ const App: React.FC = () => {
     return () => {
       window.removeEventListener('campaignsUpdated', handleCampaignsUpdated);
     };
-  }, [user?.uid, selectedCampaignId]);
+  }, [user?.uid, selectedCampaignId, isMessageModalOpen]);
 
   // Persistir seleção
   useEffect(() => {

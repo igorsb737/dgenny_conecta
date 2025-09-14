@@ -263,7 +263,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, campaigns, selectedCampai
         )}
 
         <button type="submit" className="submit-btn" disabled={!isOfflineReady}>
-          {!isOfflineReady ? 'Inicializando...' : 'Salvar Lead'}
+          {!isOfflineReady ? 'Inicializando...' : 'Salvar'}
         </button>
       </form>
     </div>
