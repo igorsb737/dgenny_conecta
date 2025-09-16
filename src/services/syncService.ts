@@ -100,17 +100,17 @@ class SyncService {
     console.log('🚀 Iniciando sincronização automática');
     this.isRunning = true;
 
-    // Verificar conectividade a cada 30 segundos
+    // Verificar conectividade a cada 2 segundos
     this.connectivityCheckInterval = setInterval(() => {
       this.checkConnectivity();
-    }, 30000);
+    }, 2000);
 
-    // Tentar sincronizar a cada 30 segundos quando online (reduzido frequência)
+    // Tentar sincronizar a cada 3 segundos quando online
     this.syncInterval = setInterval(async () => {
       if (this.connectivityStatus.isOnline && this.connectivityStatus.firebaseReachable) {
         await this.processPendingLeads();
       }
-    }, 30000);
+    }, 3000);
 
     // Sincronizar imediatamente
     await this.processPendingLeads();
@@ -152,7 +152,7 @@ class SyncService {
       // Filtrar leads com falha que podem tentar novamente (backoff exponencial)
       const retryableFailedLeads = failedLeads.filter(lead => {
         const timeSinceLastAttempt = Date.now() - (lead.lastAttempt?.getTime() || lead.createdAt.getTime());
-        const backoffDelay = Math.min(1000 * Math.pow(2, lead.attempts), 300000); // Max 5 minutos
+        const backoffDelay = Math.min(1000 * Math.pow(2, lead.attempts), 60000); // Max 1 minuto
         return timeSinceLastAttempt >= backoffDelay;
       });
 
@@ -185,7 +185,7 @@ class SyncService {
         }
 
         // Pequena pausa entre requests para não sobrecarregar
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
 
       if (processed > 0) {
@@ -429,7 +429,7 @@ class SyncService {
       } else {
         console.warn('Passo da sequência ignorado (tipo não suportado ou sem base64):', st?.tipo);
       }
-      await sleep(2000); // 2s entre mensagens
+      await sleep(800); // 800ms entre mensagens
     }
 
     console.log(`✅ Sequência "${campaign.nome}" disparada para ${lead.nome}`);
