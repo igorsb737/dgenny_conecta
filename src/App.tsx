@@ -6,6 +6,7 @@ import Login from './components/Login';
 import LeadForm from './components/LeadForm';
 import MessageCreator from './components/MessageCreator';
 import OfflineStatus from './components/OfflineStatus';
+import LeadsManager from './components/LeadsManager';
 import { offlineService } from './services/offlineService';
 import { Lead, Campaign } from './types';
 import './App.css';
@@ -28,6 +29,8 @@ const App: React.FC = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileName, setProfileName] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
+  // Gerenciador de leads
+  const [showLeadsManager, setShowLeadsManager] = useState(false);
 
   // Restaurar seleção do localStorage (somente ID)
   useEffect(() => {
@@ -399,6 +402,15 @@ const App: React.FC = () => {
             </button>
             <button
               type="button"
+              className="header-leads-btn"
+              onClick={() => setShowLeadsManager(true)}
+              aria-label="Leads"
+              title="Gerenciar Leads"
+            >
+              ✅
+            </button>
+            <button
+              type="button"
               className="header-profile-btn"
               onClick={() => setShowProfileModal(true)}
               aria-label="Perfil"
@@ -571,6 +583,11 @@ const App: React.FC = () => {
               </div>
             </div>
           )}
+
+          <LeadsManager
+            isOpen={showLeadsManager}
+            onClose={() => setShowLeadsManager(false)}
+          />
         </div>
       </main>
     </div>

@@ -436,13 +436,37 @@ class SyncService {
   }
 
   private async saveToFirebase(lead: OfflineLead): Promise<void> {
-    const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
+    const { addDoc, collection, serverTimestamp, query, where, getDocs } = await import('firebase/firestore');
+    const { getAuth } = await import('firebase/auth');
     const { db } = await import('../firebase');
+
+    const auth = getAuth();
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      throw new Error('Usuário não autenticado para salvar no Firebase');
+    }
+
+    // Verificar se já existe um lead com o mesmo offlineId para evitar duplicação
+    try {
+      const leadsRef = collection(db, 'leads');
+      const existingQuery = query(leadsRef, where('offlineId', '==', lead.id));
+      const existingSnapshot = await getDocs(existingQuery);
+      
+      if (!existingSnapshot.empty) {
+        console.log(`⏭️ Lead ${lead.id} já existe no Firebase - pulando duplicação`);
+        return;
+      }
+    } catch (error) {
+      console.warn(`⚠️ Erro ao verificar duplicação do lead ${lead.id}:`, error);
+      // Continuar com o salvamento mesmo se a verificação falhar
+    }
 
     const leadData = {
       nome: lead.nome,
       empresa: lead.empresa,
       telefone: lead.telefone,
+      userId: userId,
       campaignId: lead.campaignId || null,
       crmProvider: lead.crmProvider || null,
       crmStage: lead.crmStage || null,

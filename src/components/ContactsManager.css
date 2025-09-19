@@ -1,0 +1,266 @@
+.leads-manager-modal {
+  max-width: 1200px;
+  width: 95vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.leads-manager-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #e74c3c;
+}
+
+.retry-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: #2980b9;
+}
+
+/* Seção de campanhas */
+.campaigns-section {
+  margin-bottom: 30px;
+}
+
+.campaigns-section h4 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.campaign-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.2s ease;
+}
+
+.campaign-card:hover {
+  background: #e9ecef;
+  border-color: #6c757d;
+}
+
+.campaign-id {
+  font-size: 12px;
+  color: #6c757d;
+  font-family: monospace;
+  margin-bottom: 8px;
+}
+
+.campaign-name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.no-campaigns {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Seção de estatísticas */
+.user-stats-section {
+  margin-bottom: 30px;
+}
+
+.user-stats-section h4 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.user-stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.user-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.user-count {
+  font-size: 24px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+/* Seção da lista de leads */
+.leads-list-section h4 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.leads-table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #000000;
+  min-width: 800px;
+}
+
+.leads-table th {
+  background: #34495e;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.leads-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  font-size: 14px;
+  color: white;
+}
+
+.leads-table tbody tr:hover {
+  background: #333333;
+}
+
+.leads-table tbody tr:nth-child(even) {
+  background: #1a1a1a;
+}
+
+.leads-table tbody tr:nth-child(even):hover {
+  background: #333333;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .leads-manager-modal {
+    width: 98vw;
+    max-height: 95vh;
+  }
+  
+  .user-stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .user-stat-card {
+    padding: 15px;
+  }
+  
+  .user-name {
+    font-size: 14px;
+  }
+  
+  .user-count {
+    font-size: 20px;
+  }
+  
+  .leads-table {
+    min-width: 600px;
+  }
+  
+  .leads-table th,
+  .leads-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Ações do modal */
+.modal-actions {
+  padding: 20px;
+  border-top: 1px solid #ecf0f1;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.secondary-btn {
+  padding: 10px 20px;
+  background: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.secondary-btn:hover:not(:disabled) {
+  background: #7f8c8d;
+}
+
+.secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primary-btn {
+  padding: 10px 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+  background: #2980b9;
+}
